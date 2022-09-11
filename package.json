@@ -1,0 +1,19 @@
+{
+  "name": "dark-scanner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.2",
+    "http-proxy-agent": "^5.0.0",
+    "jsdom": "^20.0.0",
+    "mongoose": "^6.6.0"
+  }
+}
