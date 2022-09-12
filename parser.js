@@ -20,3 +20,8 @@ export function extractPastes(domSite) {
     }
     return allPastes;
 }
+
+export function extractPasteId(pageDOM) {
+    return pageDOM.querySelectorAll('.first a') === null ? null : Array.from(pageDOM.querySelectorAll('.first a'))
+    .map((idElement) => idElement.href.split('/')[idElement.href.split('/').length - 1]);
+}
