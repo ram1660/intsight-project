@@ -1,18 +1,12 @@
-// import url from 'url';
 import axios from 'axios';
-import { readFileSync } from 'fs';
 import * as dbHandler from './dbHandler.js';
 import { extractPasteId } from './parser.js';
 import HttpProxyAgent from 'http-proxy-agent';
 import * as dotenv from 'dotenv';
-let latestDatePaste = null;
-
 import jsdom from "jsdom";
 
 dotenv.config();
 const { JSDOM } = jsdom;
-
-let localPastes = 0;
 
 // HTTP/HTTPS proxy to connect to
 let proxy = 'http://localhost:8118';
@@ -40,7 +34,7 @@ async function firstTimeFetch() {
         }
         for (const id of ids) {
             const pasteInfo = await (await axiosProxy.get(endpoint + '/api/paste/' + id)).data;
-            await dbHandler.insertPaste(pasteInfo.title, pasteInfo.name, id, pasteInfo.paste);
+            await dbHandler.insertPaste(pasteInfo.name, { title: pasteInfo.title, id: id, content: pasteInfo.paste });
             await delay(100);
         }
         pageIndex += 50;
@@ -65,8 +59,12 @@ async function getRecentPastes() {
 }
 
 async function main() {
-    await dbHandler.connectDB();
     console.log('Starting.');
+    try {
+        await dbHandler.connectDB();
+    } catch (error) {
+        console.log('Failed to connect to database: ' + error);
+    }
 
     if ((await dbHandler.isDBEmpty()) === true) {
         console.log('Database is empty. Pulling all pastes from sites');
@@ -77,10 +75,11 @@ async function main() {
         const recentPastes = await getRecentPastes();
         for (const paste of recentPastes) {
             if (await dbHandler.isPasteIdExists(paste.pid) === false) {
+                console.log('Found new paste. Adding to the database');
                 const pasteInfo = await (await axiosProxy.get(endpoint + '/api/paste/' + paste.pid)).data;
-                await dbHandler.insertPaste(pasteInfo.title, pasteInfo.name, id, pasteInfo.paste);
+                await dbHandler.insertPaste(pasteInfo.name, { title: pasteInfo.title, id: paste.pid, content: pasteInfo.paste });
             }
         }
-    }, 20000);
+    }, 200000);
 }
 main();

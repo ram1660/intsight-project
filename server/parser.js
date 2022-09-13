@@ -16,7 +16,7 @@ export function extractPastes(domSite) {
         for (const contentLine of content) {
             contentArr.push(contentLine.textContent.trim());
         }
-        allPastes.push({ title: title, author: author, date: date, content: contentArr });
+        allPastes.push({ author: author, paste: {title: title, date: date, content: contentArr} });
     }
     return allPastes;
 }
