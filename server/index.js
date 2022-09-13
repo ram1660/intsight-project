@@ -1,10 +1,10 @@
 import axios from 'axios';
-import * as dbHandler from './dbHandler.js';
+import * as dbHandler from './db/dbHandler.js';
 import * as fetcher from './fetcher.js';
 import HttpProxyAgent from 'http-proxy-agent';
 import * as dotenv from 'dotenv';
-
-
+import express from 'express';
+const app = express();
 dotenv.config();
 
 // HTTP/HTTPS proxy to connect to
@@ -45,4 +45,7 @@ async function main() {
         }
     }, 200000);
 }
-main();
+
+app.listen(4000, () => {
+    main();
+});
