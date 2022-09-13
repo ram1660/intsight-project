@@ -12,8 +12,10 @@
   "dependencies": {
     "axios": "^0.27.2",
     "dotenv": "^16.0.2",
+    "express": "^4.18.1",
     "http-proxy-agent": "^5.0.0",
     "jsdom": "^20.0.0",
-    "mongoose": "^6.6.0"
+    "mongoose": "^6.6.0",
+    "ws": "^8.8.1"
   }
 }
